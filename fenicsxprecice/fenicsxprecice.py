@@ -53,7 +53,7 @@ class Adapter:
         # Setup up MPI communicator
         self._comm = mpi_comm
 
-        self._interface = precice.Interface(self._config.get_participant_name(), self._config.get_config_file_name(),
+        self._interface = precice.Participant(self._config.get_participant_name(), self._config.get_config_file_name(),
                                             self._comm.Get_rank(), self._comm.Get_size())
 
         # FEniCSx related quantities

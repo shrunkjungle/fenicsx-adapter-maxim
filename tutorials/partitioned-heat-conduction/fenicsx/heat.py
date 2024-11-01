@@ -26,11 +26,11 @@ Heat equation with mixed boundary conditions. (Neumann problem)
 
 from __future__ import print_function, division
 from mpi4py import MPI
-from dolfinx.fem import Function, FunctionSpace, Expression, Constant, dirichletbc, locate_dofs_geometrical
+from dolfinx.fem import Function, functionspace, Expression, Constant, dirichletbc, locate_dofs_geometrical
 from dolfinx.fem.petsc import LinearProblem
 from dolfinx.io import XDMFFile
-from ufl import TrialFunction, TestFunction, dx, ds, dot, grad, inner, lhs, rhs, FiniteElement, VectorElement
-from fenicsxprecice import Adapter
+from ufl import TrialFunction, TestFunction, dx, ds, dot, grad, inner, lhs, rhs#, finiteelement, VectorElement
+from fenicsx_adapter_folder.fenicsxprecice import Adapter
 from errorcomputation import compute_errors  # TODO update do dolfinx
 from my_enums import ProblemType, DomainPart
 import argparse
@@ -80,10 +80,10 @@ elif args.neumann and not args.dirichlet:
 mesh, coupling_boundary, remaining_boundary = get_geometry(MPI.COMM_WORLD, domain_part)
 
 # Define function space using mesh
-scalar_element = FiniteElement("P", mesh.ufl_cell(), 2)
-vector_element = VectorElement("P", mesh.ufl_cell(), 1)
-V = FunctionSpace(mesh, scalar_element)
-V_g = FunctionSpace(mesh, vector_element)
+# scalar_element = FiniteElement("P", mesh.ufl_cell(), 2)
+# vector_element = VectorElement("P", mesh.ufl_cell(), 1)
+V = functionspace(mesh, ("CG", 1))
+V_g = functionspace(mesh, ("CG", 1, (mesh.topology.dim,)))
 W = V_g.sub(0).collapse()[0]
 
 # Define boundary conditions
